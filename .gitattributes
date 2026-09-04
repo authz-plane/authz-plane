@@ -1,0 +1,26 @@
+# Normalise line endings in the repo to LF; check out native on Windows.
+* text=auto
+
+# MUST be LF - these execute inside Linux containers. CRLF here produces
+# "bad interpreter: /bin/bash^M", which is an hour of confused debugging.
+*.sh            text eol=lf
+*.bash          text eol=lf
+Dockerfile      text eol=lf
+*.Dockerfile    text eol=lf
+entrypoint*     text eol=lf
+*.yml           text eol=lf
+*.yaml          text eol=lf
+
+# Windows-only scripts keep CRLF.
+*.ps1           text eol=crlf
+*.cmd           text eol=crlf
+*.bat           text eol=crlf
+
+# Never touched by line-ending conversion.
+*.png binary
+*.jpg binary
+*.ico binary
+*.pdf binary
+*.snk binary
+*.dll binary
+*.gz  binary
