@@ -1,0 +1,113 @@
+name: pr
+
+# Section 14.2. Day 1 scope: format, build, unit + architecture tests.
+# Integration tests, coverage gate, CodeQL and the OpenAPI diff land on day 2+,
+# when there is something for them to check.
+on:
+  pull_request:
+    branches: [dev]
+
+permissions:
+  contents: read
+
+concurrency:
+  # A new push supersedes the previous run for the same PR.
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: build and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          # Honours global.json rather than duplicating the version here.
+          global-json-file: global.json
+
+      - name: Restore
+        run: dotnet restore AuthzPlane.slnx
+
+      - name: Verify formatting
+        # Style rules are enforced in-build too, but this reports them as a
+        # readable diff instead of a wall of IDExxxx errors.
+        run: dotnet format AuthzPlane.slnx --verify-no-changes --no-restore
+
+      - name: Build
+        # TreatWarningsAsErrors is set in Directory.Build.props, so a new warning
+        # fails here rather than accumulating.
+        run: dotnet build AuthzPlane.slnx --no-restore --configuration Release
+
+      - name: Test
+        run: >
+          dotnet test AuthzPlane.slnx
+          --no-build --configuration Release
+          --logger "trx;LogFileName=results.trx"
+          --results-directory TestResults
+          --collect:"XPlat Code Coverage"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults/
+          retention-days: 7
+
+  migrations:
+    name: migration script
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restore tools
+        run: dotnet tool restore
+
+      - name: Regenerate the migration script
+        # Section 14.6: nobody merges a migration they have not read as SQL.
+        # The committed script must match what the model produces.
+        env:
+          ConnectionStrings__ControlPlane: "Host=localhost;Database=ci;Username=ci;Password=ci"
+        run: >
+          dotnet tool run dotnet-ef migrations script --idempotent
+          --project src/AuthzPlane.Infrastructure
+          --startup-project src/AuthzPlane.Api
+          --output /tmp/migrations.sql
+
+      - name: Fail if the committed script is stale
+        run: |
+          if ! diff -u docs/db/migrations.sql /tmp/migrations.sql; then
+            echo "::error::docs/db/migrations.sql is out of date."
+            echo "Run: dotnet tool run dotnet-ef migrations script --idempotent \
+              --project src/AuthzPlane.Infrastructure \
+              --startup-project src/AuthzPlane.Api \
+              --output docs/db/migrations.sql"
+            exit 1
+          fi
+
+  secret-scan:
+    name: secret scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # gitleaks needs history to scan the commits in the PR.
+          fetch-depth: 0
+
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

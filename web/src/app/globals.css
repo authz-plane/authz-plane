@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens from the handoff README (design_handoff_authz_plane_console).
+ * Every value here is exact; add new tokens here rather than inlining hexes.
+ */
+@theme {
+  /* fonts (loaded by next/font in app/layout.tsx) */
+  --font-sans: var(--font-plex-sans), "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace, monospace;
+
+  /* surfaces */
+  --color-canvas: #07090b;
+  --color-app: #0c0f13;
+  --color-nav: #090c10;
+  --color-panel: #0a0d11;
+  --color-card: #10141a;
+  --color-inset: #0b0f14;
+  --color-elevated: #0e1218;
+  --color-hover: #12161d;
+  --color-selected: #161b23;
+  --color-input-focus-bg: #0d1219;
+
+  /* lines */
+  --color-line: #1c222b;
+  --color-line-row: #14191f;
+  --color-line-control: #242b36;
+  --color-line-disabled: #39424f;
+  --color-line-modal: #262e3a;
+  --color-line-focus: #2e3a55;
+
+  /* text */
+  --color-fg: #e7ebf1;
+  --color-fg-code: #c6cdd8;
+  --color-fg-secondary: #8b95a5;
+  --color-fg-tertiary: #7d8797;
+  --color-fg-meta: #5a6472;
+  --color-fg-footnote: #4b5563;
+
+  /* semantic */
+  --color-primary: #6e8bff;
+  --color-primary-hover: #8aa3ff;
+  --color-ink-on-primary: #07090b;
+
+  --color-link: #8aa3ff;
+  --color-link-chip: #161b23;
+  --color-link-border: #2e3a55;
+  --color-link-tint: #0e1219;
+
+  --color-ready: #3fcf8e;
+  --color-ready-chip: #0f2118;
+  --color-ready-border: #1f3326;
+  --color-ready-border-strong: #2a4a34;
+  --color-ready-tint: #0d1611;
+  --color-ready-tint-deep: #0c130f;
+
+  --color-degraded: #f5a524;
+  --color-degraded-chip: #2a2010;
+  --color-degraded-border: #33291a;
+  --color-degraded-border-strong: #3d2f14;
+  --color-degraded-tint: #141109;
+  --color-degraded-tint-deep: #12100a;
+
+  --color-failed: #f2555a;
+  --color-failed-chip: #2a1418;
+  --color-failed-border: #331e22;
+  --color-failed-border-strong: #4a2126;
+  --color-failed-tint: #150e10;
+  --color-failed-tint-deep: #140d0f;
+
+  --color-drift: #c07cf0;
+  --color-drift-chip: #231733;
+  --color-drift-border: #2b1f35;
+  --color-drift-tint: #120e17;
+
+  --color-accent: #3bc9db;
+
+  /* the "Failed" needs-attention card in screen 02 uses these two */
+  --color-failed-card-border: #33202a;
+  --color-failed-card-tint: #150f13;
+
+  /* radii */
+  --radius-chip: 5px;
+  --radius-pill: 6px;
+  --radius-control: 7px;
+  --radius-inner: 9px;
+  --radius-card: 10px;
+  --radius-tile: 13px;
+  --radius-frame: 14px;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-app);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/*
+ * Inside @layer base so Tailwind utilities (layer utilities) can override the
+ * default link colour. An unlayered rule here would win over every utility.
+ */
+@layer base {
+  a {
+    color: var(--color-link);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: #b7c5ff;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-line-control);
+  border-radius: 8px;
+}
+
+/* Focus ring from the handoff: 2px primary ring at 2px offset. */
+:where(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Skeleton shimmer (screen 20, quadrant 2). Fades #1A2028 -> #10141A. */
+@keyframes skeleton-fade {
+  0%,
+  100% {
+    background-color: #1a2028;
+  }
+  50% {
+    background-color: #10141a;
+  }
+}
+
+.skeleton {
+  animation: skeleton-fade 1.6s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background-color: #161b23;
+  }
+}
