@@ -77,7 +77,7 @@ export function Modal({
         aria-modal="true"
         aria-label={title}
         className={cn(
-          "flex max-h-[calc(100vh-40px)] w-[1080px] max-w-[calc(100vw-40px)] flex-col overflow-hidden rounded-frame border border-line-modal bg-elevated shadow-[0_40px_90px_rgba(0,0,0,.55)]",
+          "flex max-h-[calc(100vh-40px)] w-[1080px] max-w-[calc(100vw-40px)] flex-col overflow-hidden rounded-frame border border-line-modal bg-elevated shadow-[0_40px_90px_var(--color-shadow)]",
           className,
         )}
         style={{ height: 780 }}
@@ -116,7 +116,7 @@ export function Drawer({
         aria-modal="true"
         aria-label={title}
         className={cn(
-          "flex h-full w-[640px] max-w-full flex-col overflow-hidden border-l border-line-modal bg-elevated shadow-[-30px_0_70px_rgba(0,0,0,.5)]",
+          "flex h-full w-[640px] max-w-full flex-col overflow-hidden border-l border-line-modal bg-elevated shadow-[-30px_0_70px_var(--color-shadow)]",
           className,
         )}
       >

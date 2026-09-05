@@ -133,7 +133,7 @@ function RowMenu({ tenant }: { tenant: TenantSummary }) {
         <div
           id={id}
           role="menu"
-          className="absolute right-0 top-full z-20 mt-1 flex w-[180px] flex-col gap-0.5 rounded-inner border border-line-modal bg-elevated p-1 shadow-[0_18px_40px_rgba(0,0,0,0.5)]"
+          className="absolute right-0 top-full z-20 mt-1 flex w-[180px] flex-col gap-0.5 rounded-inner border border-line-modal bg-elevated p-1 shadow-[0_18px_40px_var(--color-shadow)]"
         >
           {MENU_ITEMS.map((item) => (
             <Link

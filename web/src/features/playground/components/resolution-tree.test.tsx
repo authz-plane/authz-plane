@@ -24,8 +24,8 @@ describe("ResolutionTree", () => {
     expect(direct).not.toHaveAttribute("aria-expanded");
     expect(direct).toHaveAttribute("aria-selected", "false");
     // Failed branches take the one-off frame colours.
-    expect(direct.firstElementChild?.className).toContain("bg-[#0F0E11]");
-    expect(direct.firstElementChild?.className).toContain("border-[#26202A]");
+    expect(direct.firstElementChild?.className).toContain("bg-denied-tint");
+    expect(direct.firstElementChild?.className).toContain("border-denied-border");
   });
 
   it("labels each node with its via pill and marks the decisive tuple", () => {

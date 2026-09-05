@@ -51,8 +51,8 @@ export function VersionList({
                   {current && " · current"}
                 </span>
                 {(isA || isB) && (
-                  // #1B2233 is frame 06's A-badge chip; one shade off the link chip token.
-                  <span className={cn("rounded-[4px] px-1.5 py-[2px] font-mono text-[10.5px] text-link", isB ? "bg-link-chip" : "bg-[#1B2233]")}>{isB ? "B" : "A"}</span>
+                  // link-chip-alt is frame 06's A-badge chip; one shade off link-chip.
+                  <span className={cn("rounded-[4px] px-1.5 py-[2px] font-mono text-[10.5px] text-link", isB ? "bg-link-chip" : "bg-link-chip-alt")}>{isB ? "B" : "A"}</span>
                 )}
               </span>
               <span className="text-[12px] text-fg-secondary">

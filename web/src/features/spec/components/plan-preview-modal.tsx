@@ -15,8 +15,8 @@ import { shortHash, type Plan, type PlanOp } from "../schemas";
 const OP: Record<PlanOp, { glyph: string; fg: string; row: string; word: string }> = {
   create: { glyph: "+", fg: "text-ready", row: "border-ready-border bg-ready-tint-deep", word: "create" },
   update: { glyph: "~", fg: "text-degraded", row: "border-degraded-border bg-degraded-tint-deep", word: "update" },
-  // #130D0F is frame 07's delete-row tint; one shade off the failed-tint-deep token.
-  delete: { glyph: "−", fg: "text-failed", row: "border-failed-border bg-[#130D0F]", word: "delete" },
+  // failed-row is frame 07's delete-row tint; one shade off failed-tint-deep.
+  delete: { glyph: "−", fg: "text-failed", row: "border-failed-border bg-failed-row", word: "delete" },
 };
 
 function problemOf(error: unknown): { title: string; detail?: string } {

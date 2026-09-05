@@ -2,7 +2,15 @@
 
 /*
  * Design tokens from the handoff README (design_handoff_authz_plane_console).
- * Every value here is exact; add new tokens here rather than inlining hexes.
+ *
+ * Every colour token is a light-dark() pair. The DARK value is the handoff's
+ * exact hex; the handoff has no light theme, so the LIGHT value is derived to
+ * keep the same role (surface step, line weight, text tier, phase hue) and the
+ * handoff's 4.5:1 contrast rule for text on bg/app. Add new tokens here rather
+ * than inlining hexes; a one-off from a frame still gets a pair.
+ *
+ * Which side wins is decided by `color-scheme` on :root (see below), which the
+ * root layout drives via html[data-theme] from the `theme` cookie.
  */
 @theme {
   /* fonts (loaded by next/font in app/layout.tsx) */
@@ -10,74 +18,101 @@
   --font-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace, monospace;
 
   /* surfaces */
-  --color-canvas: #07090b;
-  --color-app: #0c0f13;
-  --color-nav: #090c10;
-  --color-panel: #0a0d11;
-  --color-card: #10141a;
-  --color-inset: #0b0f14;
-  --color-elevated: #0e1218;
-  --color-hover: #12161d;
-  --color-selected: #161b23;
-  --color-input-focus-bg: #0d1219;
+  --color-canvas: light-dark(#eef1f5, #07090b);
+  --color-app: light-dark(#f5f7fa, #0c0f13);
+  --color-nav: light-dark(#eef1f5, #090c10);
+  --color-panel: light-dark(#f1f4f8, #0a0d11);
+  --color-card: light-dark(#ffffff, #10141a);
+  --color-inset: light-dark(#f3f5f9, #0b0f14);
+  --color-elevated: light-dark(#ffffff, #0e1218);
+  --color-hover: light-dark(#e9edf3, #12161d);
+  --color-selected: light-dark(#e2e7ef, #161b23);
+  --color-input-focus-bg: light-dark(#ffffff, #0d1219);
 
   /* lines */
-  --color-line: #1c222b;
-  --color-line-row: #14191f;
-  --color-line-control: #242b36;
-  --color-line-disabled: #39424f;
-  --color-line-modal: #262e3a;
-  --color-line-focus: #2e3a55;
+  --color-line: light-dark(#d9dee6, #1c222b);
+  --color-line-row: light-dark(#e6eaf0, #14191f);
+  --color-line-control: light-dark(#c8d0db, #242b36);
+  --color-line-disabled: light-dark(#aab4c2, #39424f);
+  --color-line-modal: light-dark(#c3ccd8, #262e3a);
+  --color-line-focus: light-dark(#a9b8e8, #2e3a55);
 
   /* text */
-  --color-fg: #e7ebf1;
-  --color-fg-code: #c6cdd8;
-  --color-fg-secondary: #8b95a5;
-  --color-fg-tertiary: #7d8797;
-  --color-fg-meta: #5a6472;
-  --color-fg-footnote: #4b5563;
+  --color-fg: light-dark(#171c24, #e7ebf1);
+  --color-fg-code: light-dark(#2a3140, #c6cdd8);
+  --color-fg-secondary: light-dark(#5a6577, #8b95a5);
+  --color-fg-tertiary: light-dark(#616d7f, #7d8797);
+  --color-fg-meta: light-dark(#7b8596, #5a6472);
+  --color-fg-footnote: light-dark(#94a0b0, #4b5563);
 
   /* semantic */
-  --color-primary: #6e8bff;
-  --color-primary-hover: #8aa3ff;
-  --color-ink-on-primary: #07090b;
+  --color-primary: light-dark(#4361e6, #6e8bff);
+  --color-primary-hover: light-dark(#3452d4, #8aa3ff);
+  --color-ink-on-primary: light-dark(#ffffff, #07090b);
+  --color-ink-on-drift: light-dark(#ffffff, #0b0710);
+  --color-ink-on-failed: light-dark(#ffffff, #150607);
 
-  --color-link: #8aa3ff;
-  --color-link-chip: #161b23;
-  --color-link-border: #2e3a55;
-  --color-link-tint: #0e1219;
+  --color-link: light-dark(#3a56d4, #8aa3ff);
+  --color-link-hover: light-dark(#2a44bd, #b7c5ff);
+  --color-link-chip: light-dark(#e4e9fb, #161b23);
+  /* frame 06's "A" badge chip; one shade off link-chip */
+  --color-link-chip-alt: light-dark(#dfe6fb, #1b2233);
+  --color-link-border: light-dark(#b9c6f5, #2e3a55);
+  --color-link-tint: light-dark(#eef1fd, #0e1219);
 
-  --color-ready: #3fcf8e;
-  --color-ready-chip: #0f2118;
-  --color-ready-border: #1f3326;
-  --color-ready-border-strong: #2a4a34;
-  --color-ready-tint: #0d1611;
-  --color-ready-tint-deep: #0c130f;
+  --color-ready: light-dark(#157a4c, #3fcf8e);
+  --color-ready-chip: light-dark(#dcf3e6, #0f2118);
+  --color-ready-border: light-dark(#b8e3cb, #1f3326);
+  --color-ready-border-strong: light-dark(#8fd1ae, #2a4a34);
+  --color-ready-tint: light-dark(#edf8f2, #0d1611);
+  --color-ready-tint-deep: light-dark(#f2faf5, #0c130f);
 
-  --color-degraded: #f5a524;
-  --color-degraded-chip: #2a2010;
-  --color-degraded-border: #33291a;
-  --color-degraded-border-strong: #3d2f14;
-  --color-degraded-tint: #141109;
-  --color-degraded-tint-deep: #12100a;
+  --color-degraded: light-dark(#9c5d05, #f5a524);
+  --color-degraded-chip: light-dark(#fdefd6, #2a2010);
+  --color-degraded-border: light-dark(#f3d9a4, #33291a);
+  --color-degraded-border-strong: light-dark(#e6c17a, #3d2f14);
+  --color-degraded-tint: light-dark(#fdf6e8, #141109);
+  --color-degraded-tint-deep: light-dark(#fef9ef, #12100a);
 
-  --color-failed: #f2555a;
-  --color-failed-chip: #2a1418;
-  --color-failed-border: #331e22;
-  --color-failed-border-strong: #4a2126;
-  --color-failed-tint: #150e10;
-  --color-failed-tint-deep: #140d0f;
+  --color-failed: light-dark(#c62f36, #f2555a);
+  --color-failed-chip: light-dark(#fbe1e3, #2a1418);
+  --color-failed-border: light-dark(#f3bfc2, #331e22);
+  --color-failed-border-strong: light-dark(#e89ba0, #4a2126);
+  --color-failed-tint: light-dark(#fdf0f1, #150e10);
+  --color-failed-tint-deep: light-dark(#fef4f5, #140d0f);
+  /* frame 07's delete-row tint; one shade off failed-tint-deep */
+  --color-failed-row: light-dark(#fdf0f1, #130d0f);
+  /* screen 20's forbidden badge square */
+  --color-failed-badge: light-dark(#fbe1e3, #1b1015);
 
-  --color-drift: #c07cf0;
-  --color-drift-chip: #231733;
-  --color-drift-border: #2b1f35;
-  --color-drift-tint: #120e17;
+  --color-drift: light-dark(#7f3fc4, #c07cf0);
+  --color-drift-chip: light-dark(#eee2fb, #231733);
+  --color-drift-border: light-dark(#d9c2f3, #2b1f35);
+  --color-drift-tint: light-dark(#f6f0fd, #120e17);
 
-  --color-accent: #3bc9db;
+  --color-accent: light-dark(#0f8fa0, #3bc9db);
 
   /* the "Failed" needs-attention card in screen 02 uses these two */
-  --color-failed-card-border: #33202a;
-  --color-failed-card-tint: #150f13;
+  --color-failed-card-border: light-dark(#f0c7cd, #33202a);
+  --color-failed-card-tint: light-dark(#fdf1f3, #150f13);
+
+  /* diff / editor line tints (frames 05, 06); added lines use ready-tint */
+  --color-diff-removed: light-dark(#fbe7e9, #1a0e10);
+  --color-diff-changed: light-dark(#fdf1d8, #1a1408);
+
+  /* screen 15's denied branch (no phase token) */
+  --color-denied-border: light-dark(#e3d9e6, #26202a);
+  --color-denied-tint: light-dark(#f7f3f8, #0f0e11);
+
+  /* screen 13's "not granted" ring; sits between line-control and line-disabled */
+  --color-not-granted: light-dark(#c3ccd8, #2b333f);
+
+  /* screen 01's left hero gradient stops */
+  --color-hero-top: light-dark(#eef2f7, #0a0e14);
+  --color-hero-bottom: light-dark(#e8eef6, #0b1118);
+
+  /* overlay shadow ink; a light surface needs a lighter shadow */
+  --color-shadow: light-dark(rgb(15 23 42 / 0.18), rgb(0 0 0 / 0.55));
 
   /* radii */
   --radius-chip: 5px;
@@ -89,7 +124,20 @@
   --radius-frame: 14px;
 }
 
+/*
+ * Theme selection. `light dark` lets the OS decide (the "System" option);
+ * an explicit data-theme pins one side. The root layout sets the attribute
+ * from the `theme` cookie so the first paint is already correct.
+ */
 :root {
+  color-scheme: light dark;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
   color-scheme: dark;
 }
 
@@ -124,7 +172,7 @@ p {
   }
 
   a:hover {
-    color: #b7c5ff;
+    color: var(--color-link-hover);
   }
 }
 
@@ -144,14 +192,14 @@ p {
   outline-offset: 2px;
 }
 
-/* Skeleton shimmer (screen 20, quadrant 2). Fades #1A2028 -> #10141A. */
+/* Skeleton shimmer (screen 20, quadrant 2). Dark fades #1A2028 -> #10141A. */
 @keyframes skeleton-fade {
   0%,
   100% {
-    background-color: #1a2028;
+    background-color: light-dark(#e3e8ef, #1a2028);
   }
   50% {
-    background-color: #10141a;
+    background-color: light-dark(#eef1f5, #10141a);
   }
 }
 
@@ -163,6 +211,6 @@ p {
 @media (prefers-reduced-motion: reduce) {
   .skeleton {
     animation: none;
-    background-color: #161b23;
+    background-color: light-dark(#e6eaf0, #161b23);
   }
 }

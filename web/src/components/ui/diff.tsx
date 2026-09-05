@@ -11,15 +11,15 @@ export interface DiffLine {
 
 const LINE: Record<DiffKind, { row: string; glyph: string; glyphTone: string }> = {
   added: { row: "bg-ready-tint", glyph: "+", glyphTone: "text-ready" },
-  removed: { row: "bg-[#1A0E10]", glyph: "−", glyphTone: "text-failed" },
-  changed: { row: "bg-[#1A1408]", glyph: "~", glyphTone: "text-degraded" },
+  removed: { row: "bg-diff-removed", glyph: "−", glyphTone: "text-failed" },
+  changed: { row: "bg-diff-changed", glyph: "~", glyphTone: "text-degraded" },
   context: { row: "", glyph: " ", glyphTone: "text-fg-meta" },
 };
 
 /**
  * Diff block from the handoff: each line is full-bleed tinted with its glyph,
- * unchanged lines dimmed. Tint colours: added #0D1611, removed #1A0E10,
- * changed #1A1408. Every line carries a glyph, so colour is never alone.
+ * unchanged lines dimmed. Tints are the ready-tint / diff-removed /
+ * diff-changed tokens. Every line carries a glyph, so colour is never alone.
  */
 export function DiffBlock({
   lines,

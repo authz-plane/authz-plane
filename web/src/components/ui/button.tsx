@@ -18,9 +18,9 @@ const VARIANT: Record<Variant, string> = {
   outline:
     "border border-line-control text-fg-secondary hover:border-line-disabled hover:text-fg active:brightness-[0.96]",
   drift:
-    "bg-drift text-[#0B0710] font-semibold hover:brightness-110 active:brightness-[0.96]",
+    "bg-drift text-ink-on-drift font-semibold hover:brightness-110 active:brightness-[0.96]",
   danger:
-    "bg-failed text-[#150607] font-semibold hover:brightness-110 active:brightness-[0.96]",
+    "bg-failed text-ink-on-failed font-semibold hover:brightness-110 active:brightness-[0.96]",
 };
 
 const SIZE: Record<Size, string> = {

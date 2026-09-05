@@ -3,10 +3,12 @@ import { Topbar } from "@/components/layout/topbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Eyebrow } from "@/components/ui/eyebrow";
+import { ThemeSwitcher } from "@/components/ui/theme-switcher";
 import { FactList } from "@/components/ui/well";
 import { FAST_POLL_MS, SLOW_POLL_MS } from "@/features/dashboard/polling";
 import { IN_FLIGHT_PHASES } from "@/lib/phase";
 import { requireOperator } from "@/server/auth/operator";
+import { currentTheme } from "@/server/theme";
 
 export const metadata: Metadata = { title: "Settings" };
 
@@ -18,11 +20,12 @@ function utcStamp(epochSeconds: number): string {
 
 /**
  * Operator-facing facts about this console: who is signed in, how the BFF is
- * configured, and the live-state polling rule. Nothing here is editable yet;
- * configuration comes from the environment.
+ * configured, and the live-state polling rule. The only editable thing is the
+ * appearance preference, which lives in a browser cookie; everything else
+ * comes from the environment.
  */
 export default async function SettingsPage() {
-  const operator = await requireOperator();
+  const [operator, theme] = await Promise.all([requireOperator(), currentTheme()]);
   const authMode = process.env.AUTH_MODE?.trim() || "mock";
   const apiBase = process.env.AUTHZPLANE_API_URL?.trim();
 
@@ -90,6 +93,16 @@ export default async function SettingsPage() {
             <p className="mt-auto text-[12px] leading-[1.5] text-fg-meta">
               While any tenant is {IN_FLIGHT_PHASES.join(", ")} the console refetches every {FAST_POLL_MS / 1000}s;
               once everything has settled it backs off to {SLOW_POLL_MS / 1000}s.
+            </p>
+          </Card>
+
+          <Card className="flex flex-col gap-3.5 p-[18px]">
+            <Eyebrow>Appearance</Eyebrow>
+            <CardTitle>Theme</CardTitle>
+            <ThemeSwitcher initial={theme} />
+            <p className="mt-auto text-[12px] leading-[1.5] text-fg-meta">
+              Applies immediately and is remembered by this browser in a <code className="font-mono">theme</code> cookie.
+              System re-reads the operating system whenever it changes.
             </p>
           </Card>
         </div>

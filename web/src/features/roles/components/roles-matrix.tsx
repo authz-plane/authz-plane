@@ -10,8 +10,8 @@ function Dot({ granted }: { granted: boolean }) {
       ●
     </span>
   ) : (
-    // #2B333F is the frame's "not granted" ring; there is no token between line-control and line-disabled.
-    <span aria-label="not granted" className="text-[#2B333F]">
+    // The frame's "not granted" ring sits between line-control and line-disabled; it has its own token.
+    <span aria-label="not granted" className="text-not-granted">
       ○
     </span>
   );

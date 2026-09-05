@@ -121,8 +121,8 @@ export function SpecHistoryView({ slug, a, b }: { slug: string; a?: number; b?: 
       <section className="flex min-h-0 min-w-0 flex-1 flex-col">
         <header className="flex h-[60px] shrink-0 items-center justify-between gap-4 border-b border-line px-6">
           <div className="flex items-center gap-2.5 font-mono text-[12.5px]">
-            {/* #1B2233 is frame 06's A chip; one shade off the link chip token. */}
-            <span className="rounded-pill bg-[#1B2233] px-[9px] py-1 text-link">A gen {sel.a}</span>
+            {/* link-chip-alt is frame 06's A chip; one shade off link-chip. */}
+            <span className="rounded-pill bg-link-chip-alt px-[9px] py-1 text-link">A gen {sel.a}</span>
             <span aria-hidden className="text-fg-meta">
               →
             </span>

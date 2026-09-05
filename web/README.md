@@ -7,7 +7,14 @@ attach the bearer token server-side. No token is ever readable from browser JS.
 
 Design source of truth: the handoff README in
 `design_handoff_authz_plane_console`. Tokens in `src/app/globals.css` are
-copied from it verbatim; add new ones there, never inline a hex.
+`light-dark()` pairs: the dark side is copied from the handoff verbatim, the
+light side is derived (the handoff has no light theme). Add new tokens there
+as pairs, never inline a hex.
+
+Theme: `html[data-theme]` is `system | light | dark`, read from the `theme`
+cookie by the root layout and switched client-side by `ThemeSwitcher`
+(Settings → Appearance). `system` leaves `color-scheme: light dark` so the OS
+decides; nothing else in the tree knows which theme is active.
 
 All 20 handoff screens exist. Data is served from deterministic fixtures with
 in-memory stores for mutations (they reset on restart) until AuthzPlane.Api

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
+import { currentTheme } from "@/server/theme";
 import "./globals.css";
 
 // Self-hosted by next/font at build time; the browser never calls Google.
@@ -23,9 +24,19 @@ export const metadata: Metadata = {
     "Declarative identity and authorization, continuously reconciled.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+/**
+ * html[data-theme] comes from the `theme` cookie (system | light | dark) and
+ * drives `color-scheme` in globals.css, so the first paint is already in the
+ * operator's theme. ThemeSwitcher updates the attribute client-side after that.
+ */
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const theme = await currentTheme();
   return (
-    <html lang="en" className={`${plexSans.variable} ${plexMono.variable}`}>
+    <html
+      lang="en"
+      data-theme={theme}
+      className={`${plexSans.variable} ${plexMono.variable}`}
+    >
       <body className="min-h-full">{children}</body>
     </html>
   );

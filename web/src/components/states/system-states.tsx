@@ -128,7 +128,7 @@ export function Forbidden({
       <Eyebrow>Forbidden · cross-tenant access denied</Eyebrow>
       <div
         aria-hidden
-        className="flex size-[52px] items-center justify-center rounded-tile bg-[#1B1015] font-mono text-[22px] text-failed"
+        className="flex size-[52px] items-center justify-center rounded-tile bg-failed-badge font-mono text-[22px] text-failed"
       >
         ⦸
       </div>

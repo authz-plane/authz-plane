@@ -30,7 +30,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
 
   return (
     <div className="flex h-dvh min-w-[1280px] bg-app text-fg">
-      <section className="flex w-[640px] shrink-0 flex-col justify-between border-r border-line bg-[linear-gradient(180deg,#0A0E14,#0B1118)] px-14 py-16">
+      <section className="flex w-[640px] shrink-0 flex-col justify-between border-r border-line bg-[linear-gradient(180deg,var(--color-hero-top),var(--color-hero-bottom))] px-14 py-16">
         <Wordmark size={30} />
 
         <div className="flex flex-col gap-6">

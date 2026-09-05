@@ -84,9 +84,9 @@ export function CodeEditor({
                 key={i}
                 className={cn(
                   "whitespace-pre",
-                  // Full-bleed issue rows: negative margin + matching padding (frame 05). #1A1408 is the changed-line tint.
-                  level === "warning" && "-mx-[18px] bg-[#1A1408] px-[18px]",
-                  level === "error" && "-mx-[18px] bg-[#1A0E10] px-[18px]",
+                  // Full-bleed issue rows: negative margin + matching padding (frame 05), tinted like diff lines.
+                  level === "warning" && "-mx-[18px] bg-diff-changed px-[18px]",
+                  level === "error" && "-mx-[18px] bg-diff-removed px-[18px]",
                 )}
               >
                 {line.length === 0 ? " " : tokenizeYamlLine(line).map((t, k) => (

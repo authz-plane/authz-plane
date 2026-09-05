@@ -30,8 +30,8 @@ export function pillFor(node: ExplainNode): PillKind {
 
 function rowClasses(node: ExplainNode): string {
   if (node.result === "denied") {
-    // One-off from the frame: failed branches sit on #0F0E11 behind a #26202A border (no token).
-    return "border-[#26202A] bg-[#0F0E11] text-fg-secondary py-[11px]";
+    // One-off from the frame: failed branches take the denied-tint / denied-border tokens.
+    return "border-denied-border bg-denied-tint text-fg-secondary py-[11px]";
   }
   if (pillFor(node) === "decisive") return "border-ready-border-strong bg-ready-tint text-fg py-3";
   return "border-ready-border bg-ready-tint-deep text-fg py-3";
