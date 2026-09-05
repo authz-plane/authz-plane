@@ -6,6 +6,7 @@
     <Project Path="src/AuthzPlane.Infrastructure/AuthzPlane.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/AuthzPlane.Api.IntegrationTests/AuthzPlane.Api.IntegrationTests.csproj" />
     <Project Path="tests/AuthzPlane.Application.UnitTests/AuthzPlane.Application.UnitTests.csproj" />
     <Project Path="tests/AuthzPlane.Architecture.Tests/AuthzPlane.Architecture.Tests.csproj" />
     <Project Path="tests/AuthzPlane.Domain.UnitTests/AuthzPlane.Domain.UnitTests.csproj" />

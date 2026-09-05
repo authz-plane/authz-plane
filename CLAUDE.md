@@ -16,6 +16,15 @@
   script --idempotent ...`) — CI diffs it.
 - Package versions live only in `Directory.Packages.props` (central package
   management). Add packages with `dotnet add package`, never by hand.
+- API style (ADR-015): Minimal APIs in `Api/Endpoints/<Group>Endpoints.cs`, no
+  controllers. Handlers are plain classes returning `Result<T>`; map failures
+  with `ProblemResults.From`. Wire DTOs live in `Api/Contracts`. Audit rows come
+  from `AuditSaveChangesInterceptor`; never write them by hand.
+- Integration tests (`tests/AuthzPlane.Api.IntegrationTests`) start a
+  Testcontainers Postgres, so Docker must be running. Set `AUTHZPLANE_TEST_PG`
+  to reuse the compose database instead.
+- Explain the design of each layer to the user before writing it; then build,
+  `dotnet format --verify-no-changes`, and test after every layer.
 
 ## Local environment
 - Postgres from `docker compose` is on host port **5433**; a native PostgreSQL
@@ -43,6 +52,11 @@
 - Run `npm run check` (eslint, typegen + tsc, vitest) and `npm run build` in
   `web/` before declaring UI work done.
 - Base element styles in `globals.css` go inside `@layer base`; an unlayered
-  rule beats every Tailwind utility. Tokens live only in `@theme` there.
+  rule beats every Tailwind utility. Tokens live only in `@theme` there, as
+  `light-dark(light, dark)` pairs: dark is the handoff hex verbatim, light is
+  derived. Never inline a hex in a component; add a pair instead.
+- Theme = `html[data-theme]` (`system | light | dark`) from the `theme` cookie,
+  read in the root layout via `src/server/theme.ts`. Components must not branch
+  on the theme; `color-scheme` does the switching.
 - `not-found.tsx` for unmatched URLs must be at `src/app/`; a route-group copy
   only fires for explicit `notFound()` calls.

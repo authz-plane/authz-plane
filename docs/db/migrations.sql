@@ -219,3 +219,99 @@ BEGIN
 END $EF$;
 COMMIT;
 
+START TRANSACTION;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM __ef_migrations_history WHERE "MigrationId" = '20260905061329_AddOutboxAuditIdempotency') THEN
+    CREATE TABLE audit_events (
+        id uuid NOT NULL,
+        tenant_id uuid NOT NULL,
+        actor character varying(320) NOT NULL,
+        action character varying(100) NOT NULL,
+        resource_type character varying(100) NOT NULL,
+        resource_id character varying(512) NOT NULL,
+        before jsonb,
+        after jsonb,
+        request_id character varying(64),
+        trace_id character varying(64),
+        occurred_at timestamp with time zone NOT NULL,
+        CONSTRAINT pk_audit_events PRIMARY KEY (id)
+    );
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM __ef_migrations_history WHERE "MigrationId" = '20260905061329_AddOutboxAuditIdempotency') THEN
+    CREATE TABLE idempotency_keys (
+        actor character varying(320) NOT NULL,
+        key character varying(128) NOT NULL,
+        request_hash character varying(64) NOT NULL,
+        status_code integer NOT NULL,
+        content_type character varying(100),
+        response_body text,
+        created_at timestamp with time zone NOT NULL,
+        expires_at timestamp with time zone NOT NULL,
+        CONSTRAINT pk_idempotency_keys PRIMARY KEY (actor, key)
+    );
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM __ef_migrations_history WHERE "MigrationId" = '20260905061329_AddOutboxAuditIdempotency') THEN
+    CREATE TABLE outbox_messages (
+        id uuid NOT NULL,
+        tenant_id uuid NOT NULL,
+        type character varying(100) NOT NULL,
+        payload jsonb NOT NULL,
+        attempts integer NOT NULL,
+        last_error character varying(4000),
+        last_failed_at timestamp with time zone,
+        created_at timestamp with time zone NOT NULL,
+        claimed_at timestamp with time zone,
+        processed_at timestamp with time zone,
+        CONSTRAINT pk_outbox_messages PRIMARY KEY (id),
+        CONSTRAINT fk_outbox_messages_tenants_tenant_id FOREIGN KEY (tenant_id) REFERENCES tenants (id) ON DELETE CASCADE
+    );
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM __ef_migrations_history WHERE "MigrationId" = '20260905061329_AddOutboxAuditIdempotency') THEN
+    CREATE INDEX ix_audit_tenant_time ON audit_events (tenant_id, occurred_at DESC);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM __ef_migrations_history WHERE "MigrationId" = '20260905061329_AddOutboxAuditIdempotency') THEN
+    CREATE INDEX ix_idempotency_expires ON idempotency_keys (expires_at);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM __ef_migrations_history WHERE "MigrationId" = '20260905061329_AddOutboxAuditIdempotency') THEN
+    CREATE INDEX ix_outbox_messages_tenant_id ON outbox_messages (tenant_id);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM __ef_migrations_history WHERE "MigrationId" = '20260905061329_AddOutboxAuditIdempotency') THEN
+    CREATE INDEX ix_outbox_pending ON outbox_messages (created_at) WHERE processed_at IS NULL;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM __ef_migrations_history WHERE "MigrationId" = '20260905061329_AddOutboxAuditIdempotency') THEN
+    INSERT INTO __ef_migrations_history ("MigrationId", "ProductVersion")
+    VALUES ('20260905061329_AddOutboxAuditIdempotency', '10.0.11');
+    END IF;
+END $EF$;
+COMMIT;
+

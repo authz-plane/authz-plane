@@ -1,6 +1,7 @@
 using System.Reflection;
 using AuthzPlane.Application.Abstractions;
 using AuthzPlane.Application.Tenants;
+using AuthzPlane.Application.Tenants.Queries;
 using Xunit;
 
 namespace AuthzPlane.Application.UnitTests;
@@ -20,6 +21,10 @@ public sealed class PortContractTests
     [InlineData(typeof(ICurrentUser))]
     [InlineData(typeof(IUnitOfWork))]
     [InlineData(typeof(ITenantRepository))]
+    [InlineData(typeof(ITenantQueries))]
+    [InlineData(typeof(ITenantScopeSetter))]
+    [InlineData(typeof(IOutbox))]
+    [InlineData(typeof(IRequestContext))]
     public void Port_is_a_public_interface(Type port)
     {
         Assert.True(port.IsInterface, $"{port.Name} must be an interface.");
@@ -34,7 +39,8 @@ public sealed class PortContractTests
         Type[] ports =
         [
             typeof(IClock), typeof(ICurrentTenant), typeof(ICurrentUser),
-            typeof(IUnitOfWork), typeof(ITenantRepository),
+            typeof(IUnitOfWork), typeof(ITenantRepository), typeof(ITenantQueries),
+            typeof(ITenantScopeSetter), typeof(IOutbox), typeof(IRequestContext),
         ];
 
         Assert.All(ports, p => Assert.Equal(Application, p.Assembly));

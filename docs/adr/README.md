@@ -12,3 +12,4 @@ and reviewable rather than discovered later by someone reading the code.
 | [011](011-single-image-two-runtime-roles.md) | Single image, two runtime roles instead of a separate Reconciler project | Accepted |
 | [012](012-phase-on-status-row-only.md) | Lifecycle phase on the status row only | Accepted |
 | [014](014-canonical-json-before-hashing.md) | Canonical JSON before spec hashing | Accepted |
+| [015](015-minimal-apis-and-boundary-conventions.md) | Minimal APIs, interceptor-driven audit, per-actor idempotency | Accepted |

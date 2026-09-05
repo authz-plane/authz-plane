@@ -1,9 +1,12 @@
 using System.Reflection;
 using System.Text;
 using AuthzPlane.Application.Abstractions;
+using AuthzPlane.Domain.Audit;
 using AuthzPlane.Domain.Authorization;
+using AuthzPlane.Domain.Outbox;
 using AuthzPlane.Domain.Reconciliation;
 using AuthzPlane.Domain.Tenants;
+using AuthzPlane.Infrastructure.Idempotency;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuthzPlane.Infrastructure.Persistence;
@@ -52,6 +55,12 @@ public sealed class AuthzPlaneDbContext(
 
     public DbSet<RelationTuple> RelationTuples => Set<RelationTuple>();
 
+    public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
+
+    public DbSet<AuditEvent> AuditEvents => Set<AuditEvent>();
+
+    public DbSet<IdempotencyRecord> IdempotencyRecords => Set<IdempotencyRecord>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -88,6 +97,11 @@ public sealed class AuthzPlaneDbContext(
         modelBuilder.Entity<ReconcileRun>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
         modelBuilder.Entity<DriftFinding>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
         modelBuilder.Entity<RelationTuple>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+        modelBuilder.Entity<OutboxMessage>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+        modelBuilder.Entity<AuditEvent>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+
+        // IdempotencyRecord is keyed by (actor, key), not by tenant: a caller's
+        // retry must replay regardless of which tenant the request addressed.
 
         // ReconcileChange is deliberately NOT tenant-scoped: it has no tenant_id
         // column and is only reachable by joining through reconcile_runs, which

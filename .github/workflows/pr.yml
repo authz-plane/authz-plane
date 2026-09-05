@@ -1,8 +1,9 @@
 name: pr
 
-# Section 14.2. Day 1 scope: format, build, unit + architecture tests.
-# Integration tests, coverage gate, CodeQL and the OpenAPI diff land on day 2+,
-# when there is something for them to check.
+# Section 14.2. Format, build, unit + architecture + integration tests. The
+# integration tests start a Testcontainers Postgres, which works on the hosted
+# ubuntu runner's Docker. Coverage gate, CodeQL and the OpenAPI diff are still
+# to come.
 on:
   pull_request:
     branches: [dev]
