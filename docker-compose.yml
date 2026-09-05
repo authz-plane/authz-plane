@@ -1,0 +1,42 @@
+# Local control-plane dependencies. `docker compose up -d` then
+# `dotnet run --project src/AuthzPlane.Api`.
+#
+# Day 1 brings up Postgres and Redis. OpenFGA and Zitadel join on day 3 when the
+# gateways land - adding them now would be two containers nothing talks to.
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: authzplane-postgres
+    environment:
+      POSTGRES_DB: authzplane
+      POSTGRES_USER: authzplane
+      # Local development only. Production reads this from a Kubernetes secret.
+      POSTGRES_PASSWORD: localdev
+    ports:
+      # 5433 on the host, not 5432. A native PostgreSQL service commonly owns
+      # 5432 on a developer machine, and Docker will happily publish onto a
+      # shadowed port so that connections silently reach the wrong database.
+      # Override with AUTHZPLANE_PG_PORT if 5433 is taken too.
+      - "${AUTHZPLANE_PG_PORT:-5433}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U authzplane -d authzplane"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: authzplane-redis
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:

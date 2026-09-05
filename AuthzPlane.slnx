@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AuthzPlane.Api/AuthzPlane.Api.csproj" />
+    <Project Path="src/AuthzPlane.Application/AuthzPlane.Application.csproj" />
+    <Project Path="src/AuthzPlane.Domain/AuthzPlane.Domain.csproj" />
+    <Project Path="src/AuthzPlane.Infrastructure/AuthzPlane.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AuthzPlane.Application.UnitTests/AuthzPlane.Application.UnitTests.csproj" />
+    <Project Path="tests/AuthzPlane.Architecture.Tests/AuthzPlane.Architecture.Tests.csproj" />
+    <Project Path="tests/AuthzPlane.Domain.UnitTests/AuthzPlane.Domain.UnitTests.csproj" />
+  </Folder>
+</Solution>
